@@ -269,6 +269,20 @@ def plotTS_cumulative(simsDF, simname, var, var_sd = None, ax = None, *args, **k
                  simMean[var].cumsum()-3*simMean[var_sd].cumsum()/np.sqrt(50), 
                  alpha = 0.3)
 
+def importRaster(rasterPath, **kwargs):
+    # Open and read in the raster as an array
+    raster_ds = gdal.Open(rasterPath)
+    rastermap = raster_ds.ReadAsArray()
+    
+    # Set the default data type to 'float'
+    if 'dtype' not in kwargs:
+        dtype = 'float'
+    rastermap = rastermap.astype(dtype)
+    
+    # If specified, set the no data value to NaN
+    if 'noData' in kwargs:
+        rastermap[rastermap == noData] = np.nan
+    return rastermap
         
 def plotRaster(image, ax=None, *args, **kwargs):
 
