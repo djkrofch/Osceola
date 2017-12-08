@@ -53,7 +53,7 @@ def plotRaster(image, ax=None, *args, **kwargs):
     ax.get_xaxis().set_ticks([])
     ax.get_yaxis().set_ticks([])
 	
-	def saveAsGeoTiff(spatialRaster, ndarray, outputFileName, epsg):
+def saveAsGeoTiff(spatialRaster, ndarray, outputFileName, epsg):
     templatedf = gdal.Open(spatialRaster)
     template = templatedf.ReadAsArray()
     driver = gdal.GetDriverByName('GTiff')
