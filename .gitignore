@@ -57,3 +57,5 @@ Temporary Items
 .ipynb_checkpoints/Osceola_MGMT-checkpoint.ipynb
 DFFS_FBPS_utils.pyc
 FireWeatherIndex_Calculations.pyc
+NECN_utils.pyc
+*.pyc
