@@ -384,7 +384,7 @@ def plotAllSimsMinMaxMed(simCentDF_Stack, var, treatment, ax = None, *args, **kw
     # Fill between min and max
     ax.fill_between(maxdf.index, maxdf[var], mindf[var], color = 'white', alpha = 0.3)
 	
-	def genStandMap(src_dir, base_map_name, stands_map_name):
+def genStandMap(src_dir, base_map_name, stands_map_name):
     # Load in the IC file
     baseMapPath = src_dir + base_map_name
     src_ds = gdal.Open( baseMapPath )
