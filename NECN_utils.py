@@ -269,49 +269,6 @@ def plotTS_cumulative(simsDF, simname, var, var_sd = None, ax = None, *args, **k
                  simMean[var].cumsum()-3*simMean[var_sd].cumsum()/np.sqrt(50), 
                  alpha = 0.3)
 
-def importRaster(rasterPath, **kwargs):
-    # Open and read in the raster as an array
-    raster_ds = gdal.Open(rasterPath)
-    rastermap = raster_ds.ReadAsArray()
-    
-    # Set the default data type to 'float'
-    if 'dtype' not in kwargs:
-        dtype = 'float'
-    rastermap = rastermap.astype(dtype)
-    
-    # If specified, set the no data value to NaN
-    if 'noData' in kwargs:
-        rastermap[rastermap == noData] = np.nan
-    return rastermap
-        
-def plotRaster(image, ax=None, *args, **kwargs):
-
-    # Grab figure axes if none stated
-    if ax == None:
-         ax = plt.gca()
-                   
-    # Normalize color scheme
-    if 'norm' not in kwargs:
-        vmin = kwargs.pop('vmin', None)
-        vmax = kwargs.pop('vmax', None)
-        if vmin is None:
-            vmin = np.min(image) # or what ever
-        if vmax is None:
-            vmax = np.max(image)
-        norm = matplotlib.colors.Normalize(vmin, vmax)
-        kwargs['norm'] = norm
-
-    #ax.figure.canvas.draw() # if you want to force a re-draw
-    ax.imshow(image, *args, **kwargs)
-    # Setup axes
-    ax.spines['left'].set_visible(False)
-    ax.spines['bottom'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-
-    ax.get_xaxis().set_ticks([])
-    ax.get_yaxis().set_ticks([])
-
 # Stacked bar chart code grabbed then modified from the web
 def plot_clustered_stacked(dfall, labels=None, title="multiple stacked bar plot",  H="/", **kwargs):
     """Given a list of dataframes, with identical columns and index, create a clustered stacked bar plot. 
@@ -426,3 +383,29 @@ def plotAllSimsMinMaxMed(simCentDF_Stack, var, treatment, ax = None, *args, **kw
     
     # Fill between min and max
     ax.fill_between(maxdf.index, maxdf[var], mindf[var], color = 'white', alpha = 0.3)
+	
+	def genStandMap(src_dir, base_map_name, stands_map_name):
+    # Load in the IC file
+    baseMapPath = src_dir + base_map_name
+    src_ds = gdal.Open( baseMapPath )
+    baseMap = src_ds.ReadAsArray()
+
+    # Create an 'inactive' mask from the 0 values in the IC map
+    baseMap[baseMap > 0] = 1
+
+    # Get dimensions for stand map, create a raster with values
+    # that range from 1 - the number of cells
+    rows = int(baseMap.shape[0])
+    cols = int(baseMap.shape[1])
+    cellID = np.arange(rows * cols)
+    cellID = cellID.reshape(rows,cols) + 1
+
+    # Apply the binary mask
+    standMap = cellID * baseMap
+
+    # Get a geotiff driver and write the raster
+    driver = gdal.GetDriverByName('GTiff')
+    ds = driver.Create(src_dir + stands_map_name,
+                   cols, rows, 1, gdal.GDT_Int32)
+    ds.GetRasterBand(1).WriteArray(standMap)
+    ds.FlushCache()
