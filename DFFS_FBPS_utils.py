@@ -73,8 +73,8 @@ def fuelsROS(fuelsDF, fuelCode, ISIarray, BUIarray):
         col = 0
         row = row + 1
     RSI_df = pd.DataFrame(RSI_A)
-    RSI_df.index = ISI_L.astype(int)
-    RSI_df.columns = BUI_L.astype(int)
+    RSI_df.index = ISIarray.astype(int)
+    RSI_df.columns = BUIarray.astype(int)
 
     return RSI_df
 	
