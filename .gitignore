@@ -52,3 +52,8 @@ Temporary Items
 # Output data sets
 *.csv
 
+*.pptx
+.ipynb_checkpoints/Osceola_ModelSetup-checkpoint.ipynb
+.ipynb_checkpoints/Osceola_MGMT-checkpoint.ipynb
+DFFS_FBPS_utils.pyc
+FireWeatherIndex_Calculations.pyc
