@@ -312,7 +312,6 @@ def plotRaster(image, ax=None, *args, **kwargs):
     ax.get_xaxis().set_ticks([])
     ax.get_yaxis().set_ticks([])
 
-    
 # Stacked bar chart code grabbed then modified from the web
 def plot_clustered_stacked(dfall, labels=None, title="multiple stacked bar plot",  H="/", **kwargs):
     """Given a list of dataframes, with identical columns and index, create a clustered stacked bar plot. 
